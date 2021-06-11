@@ -48,4 +48,12 @@ export class CsvUtils {
 		});
 		return jsonFromCsv;
 	}
+	static identifyCsvSepartor(csvHeader: string, csvSeparatorDefault: string): string{
+
+		if(csvSeparatorDefault){
+			return csvSeparatorDefault;
+		} else{
+			return csvHeader.includes(',') ? ',':';';
+		}
+	}
 }

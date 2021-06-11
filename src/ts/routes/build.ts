@@ -24,11 +24,13 @@ const build = (app: { [key: string]: any }): void => {
 		}
 
 		const fileContent = req.files.data.data;
+		// console.log(req.files.data.data.toString())
 		const filePath = agency
 			? `${company}/${agency}/${campaign}/${DateUtils.generateDateString()}.csv`
 			: `${company}/${campaign}/${DateUtils.generateDateString()}.csv`;
 
 		let companyConfig: Config;
+		
 
 		const configDAO = new ConfigDAO(company);
 		configDAO
@@ -51,7 +53,9 @@ const build = (app: { [key: string]: any }): void => {
 				}
 			})
 			.then(() => {
-				const jsonFromFile = CsvUtils.csv2json(fileContent.toString(), companyConfig.csvSeparator);
+				const jsonFromFile = CsvUtils.csv2json(fileContent.toString(), CsvUtils.identifyCsvSepartor(fileContent.toString(), companyConfig.csvSeparator));
+				console.log(CsvUtils.identifyCsvSepartor(fileContent.toString(), undefined))
+				// const jsonFromFile = CsvUtils.csv2json(fileContent.toString(), companyConfig.csvSeparator);
 				const jsonParameterized = new Builder(jsonFromFile, companyConfig, media).build();
 				const configVersion = companyConfig.version;
 				const configTimestamp = DateUtils.newDateStringFormat(
